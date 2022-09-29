@@ -4,19 +4,19 @@ import java.util.List;
 
 public interface PasswordService {
 
-  public String validatePasswordForAtleastThreeConditions(String password);
+  public String validatePasswordForAtleastThreeConditions();
 
-  public String validatePasswordForNotHavingLowerCaseLetters(String password);
+  public String validatePasswordForNotHavingLowerCaseLetters();
 
-  public String validatePasswordForEightChars(String str);
+  public String validatePasswordForEightChars();
 
-  public String validatePasswordForNotNull(String str);
+  public String validatePasswordForNotNull();
 
-  public String validatePasswordForUpperCaseLetter(String str);
+  public String validatePasswordForUpperCaseLetter();
 
-  public String validatePasswordForLowerCaseLetter(String str);
+  public String validatePasswordForLowerCaseLetter();
 
-  public String validatePasswordForNumber(String str);
+  public String validatePasswordForNumber();
 
   public List<String> getResultStatusMessages();
 }

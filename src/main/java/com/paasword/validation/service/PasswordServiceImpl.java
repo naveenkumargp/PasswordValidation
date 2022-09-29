@@ -9,18 +9,20 @@ import java.util.regex.Pattern;
 public class PasswordServiceImpl implements PasswordService {
 
   List<String> resultList;
+  private String password;
 
-  public PasswordServiceImpl(List<String> resultList) {
+  public PasswordServiceImpl(List<String> resultList, String password) {
     this.resultList = resultList;
+    this.password =password;
   }
 
   @Override
-  public String validatePasswordForAtleastThreeConditions(String password) {
-    validatePasswordForEightChars(password);
-    validatePasswordForNotNull(password);
-    validatePasswordForLowerCaseLetter(password);
-    validatePasswordForUpperCaseLetter(password);
-    validatePasswordForNumber(password);
+  public String validatePasswordForAtleastThreeConditions() {
+    validatePasswordForEightChars();
+    validatePasswordForNotNull();
+    validatePasswordForLowerCaseLetter();
+    validatePasswordForUpperCaseLetter();
+    validatePasswordForNumber();
     if (resultList.size() <= 2) {
       return "valid";
     }
@@ -28,8 +30,8 @@ public class PasswordServiceImpl implements PasswordService {
   }
 
   @Override
-  public String validatePasswordForNotHavingLowerCaseLetters(String password) {
-    String status = validatePasswordForLowerCaseLetter(password);
+  public String validatePasswordForNotHavingLowerCaseLetters() {
+    String status = validatePasswordForLowerCaseLetter();
     if (status == null || !(status.equalsIgnoreCase("valid"))) {
       return "not valid";
     }
@@ -37,10 +39,10 @@ public class PasswordServiceImpl implements PasswordService {
   }
 
   @Override
-  public String validatePasswordForEightChars(String password) {
+  public String validatePasswordForEightChars() {
     String status = null;
     try {
-      status = checkForEightChars(password);
+      status = checkForEightChars();
     } catch (PasswordValidationException e) {
       resultList.add(e.getMessage());
       return "not valid";
@@ -48,7 +50,7 @@ public class PasswordServiceImpl implements PasswordService {
     return status;
   }
 
-  private String checkForEightChars(String password) {
+  private String checkForEightChars() {
     if (null == password || password.length() <= 8) {
       throw new PasswordValidationException("Password should be more than 8 characters");
     }
@@ -56,10 +58,10 @@ public class PasswordServiceImpl implements PasswordService {
   }
 
   @Override
-  public String validatePasswordForNotNull(String password) {
+  public String validatePasswordForNotNull() {
     String status = null;
     try {
-      status = checkForNotNull(password);
+      status = checkForNotNull();
     } catch (PasswordValidationException e) {
       resultList.add(e.getMessage());
       return "not valid";
@@ -67,7 +69,7 @@ public class PasswordServiceImpl implements PasswordService {
     return status;
   }
 
-  private String checkForNotNull(String password) {
+  private String checkForNotNull() {
     if (password == null) {
       throw new PasswordValidationException("Password should not be null");
     }
@@ -75,13 +77,13 @@ public class PasswordServiceImpl implements PasswordService {
   }
 
   @Override
-  public String validatePasswordForUpperCaseLetter(String password) {
+  public String validatePasswordForUpperCaseLetter() {
     String status = null;
     String regex = "(?=.*[A-Z]).+$";
     String message = "Password Does not contain atleast one upper case letter";
 
     try {
-      status = checkForValidCharacters(regex, password, message);
+      status = checkForValidCharacters(regex, message);
     } catch (PasswordValidationException e) {
       resultList.add(e.getMessage());
       return "not valid";
@@ -90,12 +92,12 @@ public class PasswordServiceImpl implements PasswordService {
   }
 
   @Override
-  public String validatePasswordForLowerCaseLetter(String password) {
+  public String validatePasswordForLowerCaseLetter() {
     String status = null;
     String regex = "(?=.*[a-z]).+$";
     String message = "Password Does not contain atleast one lower case letter";
     try {
-      status = checkForValidCharacters(regex, password, message);
+      status = checkForValidCharacters(regex, message);
     } catch (PasswordValidationException e) {
       resultList.add(e.getMessage());
       return "not valid";
@@ -104,12 +106,12 @@ public class PasswordServiceImpl implements PasswordService {
   }
 
   @Override
-  public String validatePasswordForNumber(String password) {
+  public String validatePasswordForNumber() {
     String status = null;
     String regex = "(?=.*[0-9]).+$";
     String message = "Password Does not contain atleast one number";
     try {
-      status = checkForValidCharacters(regex, password, message);
+      status = checkForValidCharacters(regex, message);
     } catch (PasswordValidationException e) {
       resultList.add(e.getMessage());
       return "not valid";
@@ -122,7 +124,7 @@ public class PasswordServiceImpl implements PasswordService {
     return this.resultList;
   }
 
-  private String checkForValidCharacters(String regex, String password, String message) {
+  private String checkForValidCharacters(String regex, String message) {
     if (password == null) {
       throw new PasswordValidationException(message);
     }
